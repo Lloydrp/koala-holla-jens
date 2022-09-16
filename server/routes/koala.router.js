@@ -4,20 +4,21 @@ const koalaRouter = express.Router();
 const pool = require("../modules/pool");
 
 // GET
-koalaRouter.get('/', (req, res) => {
-    console.log('in GET koalas');
-    const queryText = `SELECT * from "koalas";`
+koalaRouter.get("/", (req, res) => {
+  console.log("in GET koalas");
+  const queryText = `SELECT * from "koalas";`;
 
-    pool.query(queryText)
+  pool
+    .query(queryText)
     .then((result) => {
-        console.log('Sucessful SELECT from database');
-        res.send(result.rows);
-    }).catch((error) => {
-        console.log("Error SELECT from 'koalas'", error);
-        res.send(505);
+      console.log("Sucessful SELECT from database");
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log("Error SELECT from 'koalas'", error);
+      res.send(505);
     });
 });
-
 
 // POST
 
@@ -40,6 +41,22 @@ VALUES ($1, $2, $3, $4, $5)`;
 });
 
 // PUT
+
+koalaRouter.put("/readytoggle/:koalaid", (req, res) => {
+  const koalaid = req.params.koalaid;
+  const queryText = `UPDATE "koalas" SET "ready_to_transfer"=(NOT "ready_to_transfer") WHERE "id" = $1 RETURNING *;`;
+
+  pool
+    .query(queryText, [koalaid])
+    .then(() => {
+      console.log("Updating ready to transfer for:", koalaid);
+      res.sendStatus(202);
+    })
+    .catch((error) => {
+      console.log("error in koala put :>> ", error);
+      res.sendStatus(500);
+    });
+});
 
 // DELETE
 
