@@ -65,17 +65,6 @@ function saveKoala(newKoala) {
     }).then( ()=> {
       console.log("POST Sucessful");
   })
-
-
-
-  // call saveKoala with the new obejct
-  saveKoala(koalaToSend);
-
-
-
-  //   }
-  // })
-
 }
 
 function deleteKoala(event) {
