@@ -23,12 +23,16 @@ function getKoalas() {
       console.log("result :>> ", result);
       for (const koala of result) {
         $("#viewKoalas").append(`
-          <tr>
+          <tr data-koalaid=${koala.id}>
             <td>${koala.name}</td>
             <td>${koala.age}</td>
             <td>${koala.gender}</td>
             <td>${koala.ready_to_transfer ? "Ready" : "Not Ready"}</td>
             <td>${koala.notes}</td>
+            <td>
+              <button class="transfer-button">Transfer</button>
+              <button class="delete-button">Delete</button>
+            </td>
           </tr>        
         `);
       }
