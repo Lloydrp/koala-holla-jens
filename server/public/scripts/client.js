@@ -10,6 +10,7 @@ $(document).ready(function () {
 
 function setupClickListeners() {
   $("#addButton").on("click", saveKoala);
+  $("#viewKoalas").on("click", ".delete-button", deleteKoala);
 }
 
 function getKoalas() {
@@ -20,7 +21,7 @@ function getKoalas() {
     url: "/koalas",
   })
     .then((result) => {
-      console.log("result :>> ", result);
+      $("#viewKoalas").empty();
       for (const koala of result) {
         $("#viewKoalas").append(`
           <tr data-koalaid=${koala.id}>
@@ -45,41 +46,30 @@ function getKoalas() {
 function saveKoala(newKoala) {
   console.log("in saveKoala", newKoala);
   // convert yes/no to true/false
-  let readyBinary = $('#readyForTransferIn').val();
+  let readyBinary = $("#readyForTransferIn").val();
 
-  readyBinary === 'Yes' ? readyBinary = true : readyBinary = false;
+  readyBinary === "Yes" ? (readyBinary = true) : (readyBinary = false);
 
-  console.log('ready to transfer', readyBinary);
+  console.log("ready to transfer", readyBinary);
 
   // ajax call to server to get koalas
   $.ajax({
-    method: 'POST',
-    url: '/koalas',
+    method: "POST",
+    url: "/koalas",
     data: {
-        name: $('#nameIn').val(),
-        age: $('#ageIn').val(),
-        gender: $('#genderIn').val(),
-        readyForTransfer: $('#readyForTransferIn').val(),
-        notes: $('#notesIn').val()
-    }
-    }).then( ()=> {
-      console.log("POST Sucessful");
-  })
-
-
-
-  // call saveKoala with the new obejct
-  saveKoala(koalaToSend);
-
-
-
-  //   }
-  // })
-
+      name: $("#nameIn").val(),
+      age: $("#ageIn").val(),
+      gender: $("#genderIn").val(),
+      readyForTransfer: $("#readyForTransferIn").val(),
+      notes: $("#notesIn").val(),
+    },
+  }).then(() => {
+    console.log("POST Sucessful");
+  });
 }
 
 function deleteKoala(event) {
-  const currentKoala = $(event.target).data("koalaid");
+  const currentKoala = $(event.target).closest("tr").data("koalaid");
   console.log("currentKoala :>> ", currentKoala);
 
   $.ajax({
