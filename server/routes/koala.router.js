@@ -27,7 +27,9 @@ koalaRouter.post("/", (req, res) => {
   const { name, age, gender, notes } = req.body;
   const ready_to_transfer = req.body.readyForTransfer;
   const queryText = `INSERT INTO "koalas" ("name", "gender", "age", "ready_to_transfer", "notes")
-VALUES ($1, $2, $3, $4, $5)`;
+VALUES ($1, $2, $3, $4, $5)`
+
+console.log( name, age, gender, notes  );
 
   pool
     .query(queryText, [name, gender, age, ready_to_transfer, notes])
