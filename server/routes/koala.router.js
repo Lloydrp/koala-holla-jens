@@ -1,4 +1,3 @@
-const { response } = require("express");
 const express = require("express");
 const koalaRouter = express.Router();
 // DB CONNECTION
@@ -77,8 +76,5 @@ koalaRouter.delete('/:koalaid', (req, res) =>{
     });
     ;
 })
-
-
-
 
 module.exports = koalaRouter;

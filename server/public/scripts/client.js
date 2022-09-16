@@ -9,14 +9,33 @@ $(document).ready(function () {
 }); // end doc ready
 
 function setupClickListeners() {
-  
-
   $("#addButton").on("click", saveKoala);
 }
 
 function getKoalas() {
   console.log("in getKoalas");
   // ajax call to server to get koalas
+  $.ajax({
+    method: "GET",
+    url: "/koalas",
+  })
+    .then((result) => {
+      console.log("result :>> ", result);
+      for (const koala of result) {
+        $("#viewKoalas").append(`
+          <tr>
+            <td>${koala.name}</td>
+            <td>${koala.age}</td>
+            <td>${koala.gender}</td>
+            <td>${koala.ready_to_transfer ? "Ready" : "Not Ready"}</td>
+            <td>${koala.notes}</td>
+          </tr>        
+        `);
+      }
+    })
+    .catch((error) => {
+      console.log("error in getKoalas :>> ", error);
+    });
 } // end getKoalas
 
 function saveKoala(newKoala) {
@@ -53,4 +72,20 @@ function saveKoala(newKoala) {
   //   }
   // })
 
+}
+
+function deleteKoala(event) {
+  const currentKoala = $(event.target).data("koalaid");
+  console.log("currentKoala :>> ", currentKoala);
+
+  $.ajax({
+    method: "DELETE",
+    url: `/koalas/${currentKoala}`,
+  })
+    .then(() => {
+      getKoalas();
+    })
+    .catch((error) => {
+      console.log("error in delete koala :>> ", error);
+    });
 }
