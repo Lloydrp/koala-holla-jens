@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const koalaRouter = express.Router();
 // DB CONNECTION
@@ -42,5 +43,23 @@ VALUES ($1, $2, $3, $4, $5)`;
 // PUT
 
 // DELETE
+koalaRouter.delete('/:koalaid', (req, res) =>{
+    console.log('req.params.koalaid is:', req.params.koalaid);
+    const koalaId = req.params.koalaid;
+    const queryText = `DELETE FROM "koalas" WHERE "id" = $1;`
+    
+    pool.query(queryText, [koalaId])
+    .then( () => {
+        console.log("Deleted Koala is:", koalaId);
+        res.sendStatus(204);
+    }).catch((error) => {
+        console.log("Error DELETING from 'koalas'", error);
+        res.send(500);
+    });
+    ;
+})
+
+
+
 
 module.exports = koalaRouter;
