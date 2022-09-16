@@ -11,6 +11,7 @@ $(document).ready(function () {
 function setupClickListeners() {
   $("#addButton").on("click", saveKoala);
   $("#viewKoalas").on("click", ".delete-button", deleteKoala);
+  $("#viewKoalas").on("click", ".transfer-button", toggleKoala);
 }
 
 function getKoalas() {
@@ -31,7 +32,7 @@ function getKoalas() {
             <td>${koala.ready_to_transfer ? "Ready" : "Not Ready"}</td>
             <td>${koala.notes}</td>
             <td>
-              <button class="transfer-button">Transfer</button>
+              <button data-koalaid = ${koala.id} class="transfer-button">Transfer</button>
               <button class="delete-button">Delete</button>
             </td>
           </tr>        
@@ -85,3 +86,15 @@ function deleteKoala(event) {
 }
 
 
+function toggleKoala(event){
+  let thisKoalaid = $(event.target).data('koalaid');
+  $.ajax({
+    method: 'PUT',
+    url: `/koalas/readytoggle/${thisKoalaid}`,
+  }).then(()=> {
+    getKoalas();
+  });
+
+
+
+}
